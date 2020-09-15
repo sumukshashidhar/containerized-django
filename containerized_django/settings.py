@@ -25,7 +25,11 @@ SECRET_KEY = 'jc4aj#p-b2c&t9&-64)6n^+32^-=bmbz5@c*&bji*lxa@dd1c4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=1))
 
-ALLOWED_HOSTS = []
+# adding the global host as per the env specification
+if int(os.environ.get('DEPLOY', default=1)) == 1:
+	ALLOWED_HOSTS=['0.0.0.0', 'localhost']
+else:
+	ALLOWED_HOSTS=['localhost']
 
 
 # Application definition
