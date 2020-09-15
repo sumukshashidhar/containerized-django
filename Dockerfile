@@ -17,7 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # grab these via Python's os.environ
 # these are 100% optional here
 ENV PORT=8000
-
+ENV DEPLOY=1
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         tzdata \
@@ -33,10 +33,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # install environment dependencies
 RUN pip3 install --upgrade pip 
-RUN pip3 install virutalenv
 
 # Install project dependencies
 RUN pip3 install -r requirements.txt
 
+RUN python3 manage.py makemigrations
+RUN python3 manage.py migrate
+
 EXPOSE 8888
-CMD gunicorn cfehome.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn containerized_django.wsgi:application --bind 0.0.0.0:8888
